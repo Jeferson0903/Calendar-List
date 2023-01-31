@@ -32,38 +32,39 @@ let year = today.getFullYear();
         "Dezembro", 
     ];
 
-    const eventsArr = [
-        {
-            day:31,
-            month: 01,
-            year: 2023,
-            events: [
-                {
-                    title:"Evento 1 Reunião com equipe FrontEnd ",
-                    time: "7:30 AM"
-                },
-                {
-                    title:"Evento 2 ",
-                    time:"13:40 PM",
-                },
-            ],
-        },
-        {
-            day:01,
-            month: 02,
-            year: 2023,
-            events: [
-                {
-                    title:"Evento 1 Reunião com equipe FrontEnd ",
-                    time: "7:30 AM"
-                },
-                {
-                    title:"Evento 2 ",
-                    time:"13:40 PM",
-                },
-            ],
-        },
-    ];
+        const eventsArr = [
+           {
+               day:31,
+               month: 01,
+                year: 2023,
+               events: [
+                    {
+                        title:"Evento 1 Reunião com equipe FrontEnd ",
+                        time: "7:30 AM"
+                    },
+                   {
+                        title:"Evento 2 ",
+                        time:"13:40 PM",
+                    },
+                ],
+            },
+            {
+               day:01,
+                month: 02,
+                year: 2023,
+                events: [
+                    {
+                        title:"Evento 1 Reunião com equipe FrontEnd ",
+                        time: "7:30 AM"
+                   },
+                    {
+                        title:"Evento 2 ",
+                        time:"13:40 PM",
+                   },
+                ],
+            },
+        ];
+
 
     function initCalendar(){
         const firstDay = new Date(year, month, 1);
@@ -322,8 +323,10 @@ let year = today.getFullYear();
                             <h3>No Events</h3>
                        </div>`;
         }
-        console.log(events);
         eventsContainer.innerHTML = events;
+
+        saveEvents();
+
      }
 
      addEventSubmit.addEventListener("click", () => {
@@ -389,6 +392,11 @@ let year = today.getFullYear();
 
         updateEvents(activeDay);
 
+        const activeDayElem = document.querySelector(".day.active");
+        if (!activeDayElem.classList.contains("event")){
+            activeDayElem.classList.add("event")
+        }
+
      });
 
      function convertTime(time) {
@@ -401,4 +409,46 @@ let year = today.getFullYear();
         return time;
      }
 
+
+     eventsContainer.addEventListener("click", (e) => {
+        if (e.target.classList.contains("event")){
+            const eventTitle = e.target.children[0].children[1].innerHTML;
+
+            eventsArr.forEach((event) =>{
+                if (
+                    event.day === activeDay &&
+                    event.month === month + 1 &&
+                    event.year === year
+                ) {
+                    event.events.forEach((item, index) => {
+                        if (item.title === eventTitle){
+                            event.events.splice(index, 1);
+                        }
+                    });
+
+                    if (event.events.length === 0){
+                        eventsArr.splice(eventsArr.indexOf(event), 1);
+
+                        const activeDayElem = document.querySelector(".day.active");
+                        if (activeDayElem.classList.contains("event")){
+                            activeDayElem.classList.remove("event");
+                        }
+                    }
+                }
+            });
+            
+            updateEvents(activeDay);
+        }
+     });
+
+
+     function saveEvents() {
+        localStorage.getItem("events", JSON.stringify(eventsArr));
+     }
+
+     function getEvents() {
+        if (localStorage.getItem("events" !== null)) {
+            eventsArr.push(...JSON.parse(localStorage.getItem("events")));
+        }
+     }
 
