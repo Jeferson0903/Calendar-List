@@ -316,10 +316,10 @@ body{
     margin-left: 15px;
     pointer-events: none;
 }
-.events::after{
+.events .event::after{
     content: "\2713";
     position: absolute;
-    top: 50%;
+    top: 10%;
     right: 0;
     font-size: 3rem;
     display: none;
@@ -329,10 +329,19 @@ body{
     color: var(--primary-clr);
     transform: translate(-50%);
 }
-.events:hover::after{
+.events .event:hover::after{
     display: flex;
 }
-
+.events .no-event{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #878787;
+}
 .add-event-wrapper{
     position: absolute;
     bottom: 100px;
